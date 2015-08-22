@@ -16,4 +16,11 @@
 		Gate,
 		Teleporter
 	}
+
+	public enum GameState
+	{
+		PreGame,
+		Ingame,
+		Endgame
+	}
 }

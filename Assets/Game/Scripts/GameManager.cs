@@ -11,10 +11,15 @@ public class GameManager : MonoBehaviour
 
 	public Tile Wall;
 	public Tile Floor;
+	public Tile TeleporterLeft;
+	public Tile TeleporterRight;
 	public GameObject Pellet;
 	public Player Player;
 
 	public Ghost Ghost1;
+	public Ghost Ghost2;
+
+	public GameState State = GameState.PreGame;
 
 	// Use this for initialization
 	void Start()
@@ -29,44 +34,71 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		HandleInput();
+	}
 
+	private void HandleInput()
+	{
+		switch(State)
+		{
+			case GameState.Ingame:
+				if (Input.GetKeyDown(KeyCode.W))
+					Ghost1.QueuedDirection = Direction.Up;
+				if (Input.GetKeyDown(KeyCode.S))
+					Ghost1.QueuedDirection = Direction.Down;
+				if (Input.GetKeyDown(KeyCode.A))
+					Ghost1.QueuedDirection = Direction.Left;
+				if (Input.GetKeyDown(KeyCode.D))
+					Ghost1.QueuedDirection = Direction.Right;
+				if (Input.GetKeyDown(KeyCode.I))
+					Ghost2.QueuedDirection = Direction.Up;
+				if (Input.GetKeyDown(KeyCode.K))
+					Ghost2.QueuedDirection = Direction.Down;
+				if (Input.GetKeyDown(KeyCode.J))
+					Ghost2.QueuedDirection = Direction.Left;
+				if (Input.GetKeyDown(KeyCode.L))
+					Ghost2.QueuedDirection = Direction.Right;
+				break;
+		}
 	}
 
 	private void CreateLevel()
 	{
-		int width = 29;
-		int height = 29;
+		int width = 31;
+		int height = 31;
 
 		string[] rows = new string[height];
-		rows[00] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
-		rows[01] = "WPPPPPPPPPPPPWWWPPPPPPPPPPPPW";
-		rows[02] = "WPWWWWPWWWWWPWWWPWWWWWPWWWWPW";
-		rows[03] = "WPWWWWPWWWWWPWWWPWWWWWPWWWWPW";
-		rows[04] = "WPWWWWPWWWWWPWWWPWWWWWPWWWWPW";
-		rows[05] = "WPPPPPPPPPPPPPPPPPPPPPPPPPPPW";
-		rows[06] = "WPWWWWPWWPWWWWWWWWWPWWPWWWWPW";
-		rows[07] = "WPWWWWPWWPWWWWWWWWWPWWPWWWWPW";
-		rows[08] = "WPPPPPPWWPPPPWWWPPPPWWPPPPPPW";
-		rows[09] = "WWWWWWPWWWWWFWWWFWWWWWPWWWWWW";
-		rows[10] = "XXXXXWPWWWWWFWWWFWWWWWPWXXXXX";
-		rows[11] = "XXXXXWPWWFFFFFFFFFFFWWPWXXXXX";
-		rows[12] = "XXXXXWPWWFWWWWGWWWWFWWPWXXXXX";
-		rows[13] = "WWWWWWPWWFWWWWFWWWWFWWPWWWWWW";
-		rows[14] = "TFFFFFPFFFWWFFFFFWWFFFPFFFFFT";
-		rows[15] = "WWWWWWPWWFWWWWWWWWWFWWPWWWWWW";
-		rows[16] = "XXXXXWPWWFWWWWWWWWWFWWPWXXXXX";
-		rows[17] = "XXXXXWPWWFFFFFFFFFFFWWPWXXXXX";
-		rows[18] = "XXXXXWPWWWWWFWWWFWWWWWPWXXXXX";
-		rows[19] = "WWWWWWPWWWWWFWWWFWWWWWPWWWWWW";
-		rows[20] = "WPPPPPPWWPPPPWWWPPPPWWPPPPPPW";
-		rows[21] = "WPWWWWPWWPWWWWWWWWWPWWPWWWWPW";
-		rows[22] = "WPWWWWPWWPWWWWWWWWWPWWPWWWWPW";
-		rows[23] = "WPPPPPPPPPPPPPFPPPPPPPPPPPPPW";
-		rows[24] = "WPWWWWPWWWWWPWWWPWWWWWPWWWWPW";
-		rows[25] = "WPWWWWPWWWWWPWWWPWWWWWPWWWWPW";
-		rows[26] = "WPWWWWPWWWWWPWWWPWWWWWPWWWWPW";
-		rows[27] = "WPPPPPPPPPPPPWWWPPPPPPPPPPPPW";
-		rows[28] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
+		rows[00] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
+		rows[01] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
+		rows[02] = "WWPPPPPPPPPPPPWWWPPPPPPPPPPPPWW";
+		rows[03] = "WWPWWWWPWWWWWPWWWPWWWWWPWWWWPWW";
+		rows[04] = "WWPWWWWPWWWWWPWWWPWWWWWPWWWWPWW";
+		rows[05] = "WWPWWWWPWWWWWPWWWPWWWWWPWWWWPWW";
+		rows[06] = "WWPPPPPPPPPPPPPPPPPPPPPPPPPPPWW";
+		rows[07] = "WWPWWWWPWWPWWWWWWWWWPWWPWWWWPWW";
+		rows[08] = "WWPWWWWPWWPWWWWWWWWWPWWPWWWWPWW";
+		rows[09] = "WWPPPPPPWWPPPPWWWPPPPWWPPPPPPWW";
+		rows[10] = "WWWWWWWPWWWWWFWWWFWWWWWPWWWWWWW";
+		rows[11] = "XXXXXXWPWWWWWFWWWFWWWWWPWXXXXXX";
+		rows[12] = "XXXXXXWPWWFFFFFFFFFFFWWPWXXXXXX";
+		rows[13] = "XXXXXXWPWWFWWWWGWWWWFWWPWXXXXXX";
+		rows[14] = "WWWWWWWPWWFWWWWFWWWWFWWPWWWWWWW";
+		rows[15] = "WWAFFFFPFFFWWFFFFFWWFFFPFFFFBWW";
+		rows[16] = "WWWWWWWPWWFWWWWWWWWWFWWPWWWWWWW";
+		rows[17] = "XXXXXXWPWWFWWWWWWWWWFWWPWXXXXXX";
+		rows[18] = "XXXXXXWPWWFFFFFFFFFFFWWPWXXXXXX";
+		rows[19] = "XXXXXXWPWWWWWFWWWFWWWWWPWXXXXXX";
+		rows[20] = "WWWWWWWPWWWWWFWWWFWWWWWPWWWWWWW";
+		rows[21] = "WWPPPPPPWWPPPPWWWPPPPWWPPPPPPWW";
+		rows[22] = "WWPWWWWPWWPWWWWWWWWWPWWPWWWWPWW";
+		rows[23] = "WWPWWWWPWWPWWWWWWWWWPWWPWWWWPWW";
+		rows[24] = "WWPPPPPPPPPPPPPFPPPPPPPPPPPPPWW";
+		rows[25] = "WWPWWWWPWWWWWPWWWPWWWWWPWWWWPWW";
+		rows[26] = "WWPWWWWPWWWWWPWWWPWWWWWPWWWWPWW";
+		rows[27] = "WWPWWWWPWWWWWPWWWPWWWWWPWWWWPWW";
+		rows[28] = "WWPPPPPPPPPPPPWWWPPPPPPPPPPPPWW";
+		rows[29] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
+		rows[30] = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
 
 		Grid = new Tile[width, height];
 
@@ -78,8 +110,13 @@ public class GameManager : MonoBehaviour
 				switch (rows[y][x])
 				{
 					case 'W':
-					case 'T':
 						newTile = Instantiate(Wall);
+						break;
+					case 'A':
+						newTile = TeleporterLeft;
+						break;
+					case 'B':
+						newTile = TeleporterRight;
 						break;
 					case 'F':
 					case 'G':
@@ -110,7 +147,8 @@ public class GameManager : MonoBehaviour
 
 	private void SetPositions()
 	{
-		Player.transform.position = new Vector3(14, -23, -0.5f);
-		Ghost1.transform.position = new Vector3(14, -11, -0.25f);
+		Player.transform.position = new Vector3(15, -24, -0.5f);
+		Ghost1.transform.position = new Vector3(13, -15, -0.75f);
+		Ghost2.transform.position = new Vector3(17, -15, -0.75f);
 	}
 }

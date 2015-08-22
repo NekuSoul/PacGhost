@@ -4,26 +4,33 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	public Direction Direction = Direction.Left;
+	public Direction Direction = Direction.None;
+	public Direction QueuedDirection = Direction.None;
 	public float Speed = 1f;
+	public Point Position = new Point(-1, -1);
 
 	private static Dictionary<TileType, bool> _WalkingAllowedOnTile = new Dictionary<TileType, bool>()
 	{
 		{ TileType.Floor, true },
 		{ TileType.Gate, false },
-		{ TileType.Teleporter, false },
+		{ TileType.Teleporter, true },
 		{ TileType.Wall, false },
 	};
-	
+
 	void Start()
 	{
 
 	}
-	
+
 	void FixedUpdate()
 	{
-		// Movement
+		if (Direction == Direction.None)
+		{
+			if (Position.x != 1 && Position.y != -1)
+				MakeDecision(GameManager.gameManager.Grid[Position.x, Position.y]);
+		}
 
+		// Movement
 		Vector3 movement = new Vector3();
 
 		if (Direction == Direction.Up)
@@ -45,12 +52,21 @@ public class Player : MonoBehaviour
 		Tile tile = other.GetComponent<Tile>();
 		if (tile != null)
 		{
+			Position = tile.Position;
+
 			if (tile.Pellet != null)
 			{
+				GetComponent<AudioSource>().Play();
 				Destroy(tile.Pellet);
 				tile.Pellet = null;
 			}
 			MakeDecision(tile);
+		}
+
+		Ghost ghost = other.GetComponent<Ghost>();
+		if (ghost != null)
+		{
+			enabled = false;
 		}
 	}
 
@@ -67,6 +83,59 @@ public class Player : MonoBehaviour
 				{
 					gridSearch[x, y] = _WalkingAllowedOnTile[grid[x, y].Type];
 				}
+			}
+		}
+
+		Ghost ghost1 = GameManager.gameManager.Ghost1;
+		if (ghost1.Position.x != -1 && ghost1.Position.y != -1)
+		{
+			gridSearch[ghost1.Position.x, ghost1.Position.y] = false;
+			gridSearch[ghost1.Position.x, ghost1.Position.y - 1] = false;
+			gridSearch[ghost1.Position.x, ghost1.Position.y + 1] = false;
+			gridSearch[ghost1.Position.x - 1, ghost1.Position.y] = false;
+			gridSearch[ghost1.Position.x + 1, ghost1.Position.y] = false;
+			switch (ghost1.Direction)
+			{
+				case Direction.Up:
+					gridSearch[ghost1.Position.x, ghost1.Position.y - 1] = false;
+					gridSearch[ghost1.Position.x, ghost1.Position.y - 2] = false;
+					break;
+				case Direction.Down:
+					gridSearch[ghost1.Position.x, ghost1.Position.y + 1] = false;
+					gridSearch[ghost1.Position.x, ghost1.Position.y + 2] = false;
+					break;
+				case Direction.Left:
+					gridSearch[ghost1.Position.x - 1, ghost1.Position.y] = false;
+					gridSearch[ghost1.Position.x - 2, ghost1.Position.y] = false;
+					break;
+				case Direction.Right:
+					gridSearch[ghost1.Position.x + 1, ghost1.Position.y] = false;
+					gridSearch[ghost1.Position.x + 2, ghost1.Position.y] = false;
+					break;
+			}
+		}
+		Ghost ghost2 = GameManager.gameManager.Ghost2;
+
+		if (ghost2.Position.x != -1 && ghost2.Position.y != -1)
+		{
+			switch (ghost2.Direction)
+			{
+				case Direction.Up:
+					gridSearch[ghost2.Position.x, ghost2.Position.y - 1] = false;
+					gridSearch[ghost2.Position.x, ghost2.Position.y - 2] = false;
+					break;
+				case Direction.Down:
+					gridSearch[ghost2.Position.x, ghost2.Position.y + 1] = false;
+					gridSearch[ghost2.Position.x, ghost2.Position.y + 2] = false;
+					break;
+				case Direction.Left:
+					gridSearch[ghost2.Position.x - 1, ghost2.Position.y] = false;
+					gridSearch[ghost2.Position.x - 2, ghost2.Position.y] = false;
+					break;
+				case Direction.Right:
+					gridSearch[ghost2.Position.x + 1, ghost2.Position.y] = false;
+					gridSearch[ghost2.Position.x + 2, ghost2.Position.y] = false;
+					break;
 			}
 		}
 
@@ -191,7 +260,9 @@ public class Player : MonoBehaviour
 
 		if (targetDirection != Direction)
 		{
-			transform.position = tile.transform.position;
+			Vector3 tempPos = tile.transform.position;
+			tempPos.z = transform.position.z;
+			transform.position = tempPos;
 			Direction = targetDirection;
 		}
 	}
@@ -242,14 +313,5 @@ public class Player : MonoBehaviour
 		}
 
 		return false;
-	}
-
-	void OnTriggerExit2D(Collider2D other)
-	{
-		Tile tile = other.GetComponent<Tile>();
-		if (tile != null)
-		{
-
-		}
 	}
 }
