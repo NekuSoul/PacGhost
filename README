@@ -1,6 +1,5 @@
-PacGhost v1.0
-
-A Game Made by Nekusoul
+​PacGhost v1.0
+A game made by Nekusoul
     for the Ludum Dare 33
         - You Are The Monster -
 
@@ -10,10 +9,10 @@ You control the ghosts.
 Catch Pacman before he wins!
 
 Controls:
-w,a,s,d -> Control Blue Ghost
-I,j,k,l -> Control Pink Ghost
+W,A,S,D -> Control Blue Ghost
+I,J,K,L -> Control Pink Ghost
 
 Choose a difficulty to start:
-( 1)      Easy: Slow and Bright
+(1) Easy: Slow and Bright
 (2) Normal: Slow and Dark
-(3)      Hard: Fast and Dark
+(3) Hard: Fast and Dark
