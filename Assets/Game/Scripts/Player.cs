@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
 				Destroy(tile.Pellet);
 				tile.Pellet = null;
 				GameManager.gameManager.Pellets--;
+				GameManager.gameManager.UpdateText();
 				if (GameManager.gameManager.Pellets == 0)
 				{
 					GameManager.gameManager.LoseGame();
@@ -100,27 +101,31 @@ public class Player : MonoBehaviour
 			gridSearch[ghost1.Position.x, ghost1.Position.y + 1] = false;
 			gridSearch[ghost1.Position.x - 1, ghost1.Position.y] = false;
 			gridSearch[ghost1.Position.x + 1, ghost1.Position.y] = false;
-			//gridSearch[ghost1.Position.x - 1, ghost1.Position.y - 1] = false;
-			//gridSearch[ghost1.Position.x + 1, ghost1.Position.y + 1] = false;
-			//gridSearch[ghost1.Position.x - 1, ghost1.Position.y + 1] = false;
-			//gridSearch[ghost1.Position.x + 1, ghost1.Position.y - 1] = false;
 			switch (ghost1.Direction)
 			{
 				case Direction.Up:
 					gridSearch[ghost1.Position.x, ghost1.Position.y - 1] = false;
 					gridSearch[ghost1.Position.x, ghost1.Position.y - 2] = false;
+					gridSearch[ghost1.Position.x - 1, ghost1.Position.y - 1] = false;
+					gridSearch[ghost1.Position.x + 1, ghost1.Position.y - 1] = false;
 					break;
 				case Direction.Down:
 					gridSearch[ghost1.Position.x, ghost1.Position.y + 1] = false;
 					gridSearch[ghost1.Position.x, ghost1.Position.y + 2] = false;
+					gridSearch[ghost1.Position.x - 1, ghost1.Position.y + 1] = false;
+					gridSearch[ghost1.Position.x + 1, ghost1.Position.y + 1] = false;
 					break;
 				case Direction.Left:
 					gridSearch[ghost1.Position.x - 1, ghost1.Position.y] = false;
 					gridSearch[ghost1.Position.x - 2, ghost1.Position.y] = false;
+					gridSearch[ghost1.Position.x - 1, ghost1.Position.y - 1] = false;
+					gridSearch[ghost1.Position.x - 1, ghost1.Position.y + 1] = false;
 					break;
 				case Direction.Right:
 					gridSearch[ghost1.Position.x + 1, ghost1.Position.y] = false;
 					gridSearch[ghost1.Position.x + 2, ghost1.Position.y] = false;
+					gridSearch[ghost1.Position.x + 1, ghost1.Position.y - 1] = false;
+					gridSearch[ghost1.Position.x + 1, ghost1.Position.y + 1] = false;
 					break;
 			}
 		}
@@ -133,27 +138,31 @@ public class Player : MonoBehaviour
 			gridSearch[ghost2.Position.x, ghost2.Position.y + 1] = false;
 			gridSearch[ghost2.Position.x - 1, ghost2.Position.y] = false;
 			gridSearch[ghost2.Position.x + 1, ghost2.Position.y] = false;
-			//gridSearch[ghost2.Position.x - 1, ghost2.Position.y - 1] = false;
-			//gridSearch[ghost2.Position.x + 1, ghost2.Position.y + 1] = false;
-			//gridSearch[ghost2.Position.x - 1, ghost2.Position.y + 1] = false;
-			//gridSearch[ghost2.Position.x + 1, ghost2.Position.y - 1] = false;
 			switch (ghost2.Direction)
 			{
 				case Direction.Up:
 					gridSearch[ghost2.Position.x, ghost2.Position.y - 1] = false;
 					gridSearch[ghost2.Position.x, ghost2.Position.y - 2] = false;
+					gridSearch[ghost2.Position.x - 1, ghost2.Position.y - 1] = false;
+					gridSearch[ghost2.Position.x + 1, ghost2.Position.y - 1] = false;
 					break;
 				case Direction.Down:
 					gridSearch[ghost2.Position.x, ghost2.Position.y + 1] = false;
 					gridSearch[ghost2.Position.x, ghost2.Position.y + 2] = false;
+					gridSearch[ghost2.Position.x - 1, ghost2.Position.y + 1] = false;
+					gridSearch[ghost2.Position.x + 1, ghost2.Position.y + 1] = false;
 					break;
 				case Direction.Left:
 					gridSearch[ghost2.Position.x - 1, ghost2.Position.y] = false;
 					gridSearch[ghost2.Position.x - 2, ghost2.Position.y] = false;
+					gridSearch[ghost2.Position.x - 1, ghost2.Position.y - 1] = false;
+					gridSearch[ghost2.Position.x - 1, ghost2.Position.y + 1] = false;
 					break;
 				case Direction.Right:
 					gridSearch[ghost2.Position.x + 1, ghost2.Position.y] = false;
 					gridSearch[ghost2.Position.x + 2, ghost2.Position.y] = false;
+					gridSearch[ghost2.Position.x + 1, ghost2.Position.y - 1] = false;
+					gridSearch[ghost2.Position.x + 1, ghost2.Position.y + 1] = false;
 					break;
 			}
 		}

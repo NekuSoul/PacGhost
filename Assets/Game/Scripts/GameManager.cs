@@ -2,6 +2,7 @@
 //using System;
 using Assets.Game.Code;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,16 +10,18 @@ public class GameManager : MonoBehaviour
 
 	public GameObject Level;
 	public Tile[,] Grid;
-
 	public Tile Wall;
 	public Tile Floor;
 	public Tile TeleporterLeft;
 	public Tile TeleporterRight;
 	public GameObject Pellet;
 	public Player Player;
-
 	public Ghost Ghost1;
 	public Ghost Ghost2;
+	public Text HeaderLeft;
+	public Text HeaderRight;
+	public Text MainText;
+	public Text Footer;
 
 	public int Pellets = 0;
 
@@ -31,17 +34,24 @@ public class GameManager : MonoBehaviour
 		RenderSettings.ambientLight = Color.black;
 		CreateLevel();
 		SetPositions();
+		MainText.text = "READY?";
 
 		StartCoroutine("StartGame");
 	}
 
 	IEnumerator StartGame()
 	{
+		UpdateText();
+		DisplayHighScore();
+		Footer.text = string.Empty;
 		yield return new WaitForSeconds(5);
 		Player.enabled = true;
 		Ghost1.enabled = true;
 		Ghost2.enabled = true;
 		State = GameState.Ingame;
+		MainText.text = "GO!";
+		yield return new WaitForSeconds(1);
+		MainText.text = string.Empty; ;
 	}
 
 	public void WinGame()
@@ -50,6 +60,17 @@ public class GameManager : MonoBehaviour
 		Player.gameObject.SetActive(false);
 		Ghost1.enabled = false;
 		Ghost2.enabled = false;
+		Footer.text = "Press 'R' to restart";
+		if (PlayerPrefs.GetInt("Highscore", 0) < Pellets)
+		{
+			PlayerPrefs.SetInt("Highscore", Pellets);
+			DisplayHighScore();
+			MainText.text = "NEW HIGHSCORE";
+		}
+		else
+		{
+			MainText.text = "YOU WIN!";
+		}
 		State = GameState.Endgame;
 	}
 
@@ -61,7 +82,19 @@ public class GameManager : MonoBehaviour
 		Ghost1.GetComponent<Animator>().Play("GhostLose");
 		Ghost2.enabled = false;
 		Ghost2.GetComponent<Animator>().Play("GhostLose");
+		MainText.text = "GAME OVER!";
+		Footer.text = "Press 'R' to restart";
 		State = GameState.Endgame;
+	}
+
+	public void UpdateText()
+	{
+		HeaderLeft.text = string.Format("Remaining: {0}", Pellets);
+	}
+
+	public void DisplayHighScore()
+	{
+		HeaderRight.text = string.Format("Highscore: {0}", PlayerPrefs.GetInt("Highscore", 0));
 	}
 
 	void Update()
@@ -90,6 +123,11 @@ public class GameManager : MonoBehaviour
 					Ghost2.QueuedDirection = Direction.Left;
 				if (Input.GetKeyDown(KeyCode.L))
 					Ghost2.QueuedDirection = Direction.Right;
+				if (Input.GetKeyDown(KeyCode.R))
+					Application.LoadLevel("Ingame");
+				break;
+
+			case GameState.Endgame:
 				if (Input.GetKeyDown(KeyCode.R))
 					Application.LoadLevel("Ingame");
 				break;
