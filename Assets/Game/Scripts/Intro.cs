@@ -9,6 +9,7 @@ public class Intro : MonoBehaviour
 	string _text;
 	int currentPos;
 	bool soundSwitch;
+	bool displayAll;
 
 	void Start()
 	{
@@ -26,13 +27,21 @@ public class Intro : MonoBehaviour
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			Application.LoadLevel("Ingame");
 			PlayerPrefs.SetInt("Difficulty", 2);
+			Application.LoadLevel("Ingame");
 		}
 		if (Input.GetKeyDown(KeyCode.Alpha3))
 		{
-			Application.LoadLevel("Ingame");
 			PlayerPrefs.SetInt("Difficulty", 3);
+			Application.LoadLevel("Ingame");
+		}
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+		if (Input.GetKeyDown(KeyCode.Return))
+		{
+			displayAll = true;
 		}
 	}
 
@@ -40,6 +49,11 @@ public class Intro : MonoBehaviour
 	{
 		for (int i = 0; i < _text.Length; i++)
 		{
+			if(displayAll)
+			{
+				TextField.text = _text;
+				break;
+			}
 			TextField.text = _text.Substring(0, i);
 			soundSwitch = !soundSwitch;
 			if (soundSwitch)

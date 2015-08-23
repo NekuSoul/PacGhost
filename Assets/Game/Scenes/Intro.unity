@@ -541,7 +541,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "PacGhost v1.0\n\nA Game Made by Nekusoul\n    for the Ludum Dare 33\n        -
-    You Are The Monster -\n\nRules:\nIt's Pacman.\nBut you control the ghosts.\nCatch
+    You Are The Monster -\n\nRules:\nOne round of Pacman.\nYou control the ghosts.\nCatch
     Pacman before he wins!\n\nControls:\nw,a,s,d -> Control Blue Ghost\nI,j,k,l ->
     Control Pink Ghost\n\nChoose a difficulty to start:\n( 1)      Easy: Slow and
     Bright\n(2) Normal: Slow and Dark\n(3)      Hard: Fast and Dark\n"

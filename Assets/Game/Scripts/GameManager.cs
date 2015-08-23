@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 		gameManager = this;
 
 		Difficulty = PlayerPrefs.GetInt("Difficulty");
-		switch(Difficulty)
+		switch (Difficulty)
 		{
 			case 1:
 				EasyModeLight.enabled = true;
@@ -71,7 +71,18 @@ public class GameManager : MonoBehaviour
 	{
 		UpdateText();
 		DisplayHighScore();
-		Footer.text = string.Empty;
+		switch (Difficulty)
+		{
+			case 1:
+				Footer.text = "Easy";
+				break;
+			case 2:
+				Footer.text = "Medium";
+				break;
+			case 3:
+				Footer.text = "Hard";
+				break;
+		}
 		yield return new WaitForSeconds(5);
 		Player.enabled = true;
 		Ghost1.enabled = true;
@@ -88,7 +99,7 @@ public class GameManager : MonoBehaviour
 		Player.gameObject.SetActive(false);
 		Ghost1.enabled = false;
 		Ghost2.enabled = false;
-		Footer.text = "Press 'R' to restart";
+		Footer.text = "Press (R) to restart" + System.Environment.NewLine + "or (1)/(2)/(3) to set the difficulty";
 		if (PlayerPrefs.GetInt("Highscore" + Difficulty, 0) < Pellets)
 		{
 			PlayerPrefs.SetInt("Highscore" + Difficulty, Pellets);
@@ -111,7 +122,7 @@ public class GameManager : MonoBehaviour
 		Ghost2.enabled = false;
 		Ghost2.GetComponent<Animator>().Play("GhostLose");
 		MainText.text = "GAME OVER!";
-		Footer.text = "Press 'R' to restart";
+		Footer.text = "Press (R) to restart" + System.Environment.NewLine + "or (1)/(2)/(3) to set the difficulty";
 		State = GameState.Endgame;
 	}
 
@@ -132,6 +143,30 @@ public class GameManager : MonoBehaviour
 
 	private void HandleInput()
 	{
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			PlayerPrefs.SetInt("Difficulty", 1);
+			Application.LoadLevel("Ingame");
+		}
+		if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			PlayerPrefs.SetInt("Difficulty", 2);
+			Application.LoadLevel("Ingame");
+		}
+		if (Input.GetKeyDown(KeyCode.Alpha3))
+		{
+			PlayerPrefs.SetInt("Difficulty", 3);
+			Application.LoadLevel("Ingame");
+		}
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			Application.LoadLevel("Ingame");
+		}
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+
 		switch (State)
 		{
 			case GameState.Ingame:
@@ -151,11 +186,6 @@ public class GameManager : MonoBehaviour
 					Ghost2.QueuedDirection = Direction.Left;
 				if (Input.GetKeyDown(KeyCode.L))
 					Ghost2.QueuedDirection = Direction.Right;
-				if (Input.GetKeyDown(KeyCode.R))
-					Application.LoadLevel("Ingame");
-				break;
-
-			case GameState.Endgame:
 				if (Input.GetKeyDown(KeyCode.R))
 					Application.LoadLevel("Ingame");
 				break;

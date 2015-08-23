@@ -1,0 +1,19 @@
+PacGhost v1.0
+
+A Game Made by Nekusoul
+    for the Ludum Dare 33
+        - You Are The Monster -
+
+Rules:
+One round of Pacman.
+You control the ghosts.
+Catch Pacman before he wins!
+
+Controls:
+w,a,s,d -> Control Blue Ghost
+I,j,k,l -> Control Pink Ghost
+
+Choose a difficulty to start:
+( 1)      Easy: Slow and Bright
+(2) Normal: Slow and Dark
+(3)      Hard: Fast and Dark
