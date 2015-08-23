@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 //using System;
 using Assets.Game.Code;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,9 +20,10 @@ public class GameManager : MonoBehaviour
 	public Ghost Ghost1;
 	public Ghost Ghost2;
 
+	public int Pellets = 0;
+
 	public GameState State = GameState.PreGame;
 
-	// Use this for initialization
 	void Start()
 	{
 		gameManager = this;
@@ -29,9 +31,38 @@ public class GameManager : MonoBehaviour
 		RenderSettings.ambientLight = Color.black;
 		CreateLevel();
 		SetPositions();
+
+		StartCoroutine("StartGame");
 	}
 
-	// Update is called once per frame
+	IEnumerator StartGame()
+	{
+		yield return new WaitForSeconds(5);
+		Player.enabled = true;
+		Ghost1.enabled = true;
+		Ghost2.enabled = true;
+		State = GameState.Ingame;
+	}
+
+	public void WinGame()
+	{
+		Player.enabled = false;
+		Player.gameObject.SetActive(false);
+		Ghost1.enabled = false;
+		Ghost2.enabled = false;
+		State = GameState.Endgame;
+	}
+
+	public void LoseGame()
+	{
+		Player.enabled = false;
+		Ghost1.enabled = false;
+		Ghost1.GetComponent<Animator>().Play("GhostLose");
+		Ghost2.enabled = false;
+		Ghost2.GetComponent<Animator>().Play("GhostLose");
+		State = GameState.Endgame;
+	}
+
 	void Update()
 	{
 		HandleInput();
@@ -39,7 +70,7 @@ public class GameManager : MonoBehaviour
 
 	private void HandleInput()
 	{
-		switch(State)
+		switch (State)
 		{
 			case GameState.Ingame:
 				if (Input.GetKeyDown(KeyCode.W))
@@ -58,6 +89,8 @@ public class GameManager : MonoBehaviour
 					Ghost2.QueuedDirection = Direction.Left;
 				if (Input.GetKeyDown(KeyCode.L))
 					Ghost2.QueuedDirection = Direction.Right;
+				if (Input.GetKeyDown(KeyCode.R))
+					Application.LoadLevel("Ingame");
 				break;
 		}
 	}
@@ -128,6 +161,7 @@ public class GameManager : MonoBehaviour
 						pellet.transform.parent = newTile.transform;
 						pellet.transform.localPosition.Set(0, 0, -0.5f);
 						newTile.Pellet = pellet;
+						Pellets++;
 						break;
 					case 'X':
 					default:
@@ -148,7 +182,10 @@ public class GameManager : MonoBehaviour
 	private void SetPositions()
 	{
 		Player.transform.position = new Vector3(15, -24, -0.5f);
+		Player.Position = new Point(15, 24);
 		Ghost1.transform.position = new Vector3(13, -15, -0.75f);
+		Ghost1.Position = new Point(13, 15);
 		Ghost2.transform.position = new Vector3(17, -15, -0.75f);
+		Ghost2.Position = new Point(17, 15);
 	}
 }

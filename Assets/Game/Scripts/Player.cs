@@ -59,6 +59,11 @@ public class Player : MonoBehaviour
 				GetComponent<AudioSource>().Play();
 				Destroy(tile.Pellet);
 				tile.Pellet = null;
+				GameManager.gameManager.Pellets--;
+				if (GameManager.gameManager.Pellets == 0)
+				{
+					GameManager.gameManager.LoseGame();
+				}
 			}
 			MakeDecision(tile);
 		}
@@ -67,6 +72,7 @@ public class Player : MonoBehaviour
 		if (ghost != null)
 		{
 			enabled = false;
+			GameManager.gameManager.WinGame();
 		}
 	}
 
@@ -94,6 +100,10 @@ public class Player : MonoBehaviour
 			gridSearch[ghost1.Position.x, ghost1.Position.y + 1] = false;
 			gridSearch[ghost1.Position.x - 1, ghost1.Position.y] = false;
 			gridSearch[ghost1.Position.x + 1, ghost1.Position.y] = false;
+			//gridSearch[ghost1.Position.x - 1, ghost1.Position.y - 1] = false;
+			//gridSearch[ghost1.Position.x + 1, ghost1.Position.y + 1] = false;
+			//gridSearch[ghost1.Position.x - 1, ghost1.Position.y + 1] = false;
+			//gridSearch[ghost1.Position.x + 1, ghost1.Position.y - 1] = false;
 			switch (ghost1.Direction)
 			{
 				case Direction.Up:
@@ -118,6 +128,15 @@ public class Player : MonoBehaviour
 
 		if (ghost2.Position.x != -1 && ghost2.Position.y != -1)
 		{
+			gridSearch[ghost2.Position.x, ghost2.Position.y] = false;
+			gridSearch[ghost2.Position.x, ghost2.Position.y - 1] = false;
+			gridSearch[ghost2.Position.x, ghost2.Position.y + 1] = false;
+			gridSearch[ghost2.Position.x - 1, ghost2.Position.y] = false;
+			gridSearch[ghost2.Position.x + 1, ghost2.Position.y] = false;
+			//gridSearch[ghost2.Position.x - 1, ghost2.Position.y - 1] = false;
+			//gridSearch[ghost2.Position.x + 1, ghost2.Position.y + 1] = false;
+			//gridSearch[ghost2.Position.x - 1, ghost2.Position.y + 1] = false;
+			//gridSearch[ghost2.Position.x + 1, ghost2.Position.y - 1] = false;
 			switch (ghost2.Direction)
 			{
 				case Direction.Up:
