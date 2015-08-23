@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
 	public Text HeaderRight;
 	public Text MainText;
 	public Text Footer;
+	public AudioClip WinSound;
+	public AudioClip LoseSound;
+	public AudioClip StartSound;
 
 	public Light EasyModeLight;
 
@@ -89,6 +92,7 @@ public class GameManager : MonoBehaviour
 		Ghost2.enabled = true;
 		State = GameState.Ingame;
 		MainText.text = "GO!";
+		GetComponent<AudioSource>().PlayOneShot(StartSound);
 		yield return new WaitForSeconds(1);
 		MainText.text = string.Empty; ;
 	}
@@ -99,6 +103,7 @@ public class GameManager : MonoBehaviour
 		Player.gameObject.SetActive(false);
 		Ghost1.enabled = false;
 		Ghost2.enabled = false;
+		GetComponent<AudioSource>().PlayOneShot(WinSound);
 		Footer.text = "Press (R) to restart" + System.Environment.NewLine + "or (1)/(2)/(3) to set the difficulty";
 		if (PlayerPrefs.GetInt("Highscore" + Difficulty, 0) < Pellets)
 		{
@@ -121,6 +126,7 @@ public class GameManager : MonoBehaviour
 		Ghost1.GetComponent<Animator>().Play("GhostLose");
 		Ghost2.enabled = false;
 		Ghost2.GetComponent<Animator>().Play("GhostLose");
+		GetComponent<AudioSource>().PlayOneShot(LoseSound);
 		MainText.text = "GAME OVER!";
 		Footer.text = "Press (R) to restart" + System.Environment.NewLine + "or (1)/(2)/(3) to set the difficulty";
 		State = GameState.Endgame;
