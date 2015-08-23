@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
 	public void LoseGame()
 	{
 		Player.enabled = false;
+		Player.GetComponent<Animator>().Play("PlayerWin");
 		Ghost1.enabled = false;
 		Ghost1.GetComponent<Animator>().Play("GhostLose");
 		Ghost2.enabled = false;
