@@ -23,13 +23,41 @@ public class GameManager : MonoBehaviour
 	public Text MainText;
 	public Text Footer;
 
-	public int Pellets = 0;
+	public Light EasyModeLight;
 
 	public GameState State = GameState.PreGame;
+
+	public int Pellets = 0;
+
+	private int Difficulty;
 
 	void Start()
 	{
 		gameManager = this;
+
+		Difficulty = PlayerPrefs.GetInt("Difficulty");
+		switch(Difficulty)
+		{
+			case 1:
+				EasyModeLight.enabled = true;
+				Player.gameObject.layer = 8;
+				Player.Speed = 6;
+				Ghost1.Speed = 5;
+				Ghost2.Speed = 5;
+				break;
+			case 2:
+				EasyModeLight.enabled = false;
+				Player.Speed = 6;
+				Ghost1.Speed = 5;
+				Ghost2.Speed = 5;
+				break;
+			case 3:
+				EasyModeLight.enabled = false;
+				Player.Speed = 10;
+				Ghost1.Speed = 7.5f;
+				Ghost2.Speed = 7.5f;
+				break;
+		}
 
 		RenderSettings.ambientLight = Color.black;
 		CreateLevel();
@@ -61,9 +89,9 @@ public class GameManager : MonoBehaviour
 		Ghost1.enabled = false;
 		Ghost2.enabled = false;
 		Footer.text = "Press 'R' to restart";
-		if (PlayerPrefs.GetInt("Highscore", 0) < Pellets)
+		if (PlayerPrefs.GetInt("Highscore" + Difficulty, 0) < Pellets)
 		{
-			PlayerPrefs.SetInt("Highscore", Pellets);
+			PlayerPrefs.SetInt("Highscore" + Difficulty, Pellets);
 			DisplayHighScore();
 			MainText.text = "NEW HIGHSCORE";
 		}
@@ -94,7 +122,7 @@ public class GameManager : MonoBehaviour
 
 	public void DisplayHighScore()
 	{
-		HeaderRight.text = string.Format("Highscore: {0}", PlayerPrefs.GetInt("Highscore", 0));
+		HeaderRight.text = string.Format("Highscore: {0}", PlayerPrefs.GetInt("Highscore" + Difficulty, 0));
 	}
 
 	void Update()

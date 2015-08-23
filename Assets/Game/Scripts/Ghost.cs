@@ -55,6 +55,7 @@ public class Ghost : MonoBehaviour
 			if (tile.gameObject == GameManager.gameManager.TeleporterLeft.gameObject && Direction == Direction.None)
 			{
 				Vector3 tempPos = GameManager.gameManager.TeleporterRight.transform.position;
+				tile.GetComponent<AudioSource>().Play();
 				tempPos.z = transform.position.z;
 				transform.position = tempPos;
 				Direction = Direction.Left;
@@ -62,6 +63,7 @@ public class Ghost : MonoBehaviour
 			if (tile.gameObject == GameManager.gameManager.TeleporterRight.gameObject && Direction == Direction.None)
 			{
 				Vector3 tempPos = GameManager.gameManager.TeleporterLeft.transform.position;
+				tile.GetComponent<AudioSource>().Play();
 				tempPos.z = transform.position.z;
 				transform.position = tempPos;
 				Direction = Direction.Right;
@@ -143,6 +145,11 @@ public class Ghost : MonoBehaviour
 			tempPos.z = transform.position.z;
 			transform.position = tempPos;
 			Direction = targetDirection;
+
+			if(Direction==Direction.None)
+			{
+				GetComponent<AudioSource>().Play();
+			}
 		}
 	}
 }
